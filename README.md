@@ -3,25 +3,29 @@
 
 For static debug
 
-----------
-
+```
 npm run web-dev
 npm run gulp
 npm run serve
+```
 
 -----------
 
 If you want to connect to remote server run commands:
 
---------------
-
+```
 npm run proxy 3724 logon.nw-wow.ru:3724
 npm run proxy 8086 95.181.139.52:8086
+```
+
+--------------
+
+
 
 
 **Before you start**
 
-
+Copy blizzardry and websockify to the node_modules
 
 # Wowser
 
