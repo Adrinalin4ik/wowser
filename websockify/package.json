@@ -1,0 +1,59 @@
+{
+  "_from": "websockify@^0.7.1",
+  "_id": "websockify@0.7.1",
+  "_inBundle": false,
+  "_integrity": "sha1-Bp4HEAriQ5ciB2yf8dHwNHsLkd8=",
+  "_location": "/websockify",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "websockify@^0.7.1",
+    "name": "websockify",
+    "escapedName": "websockify",
+    "rawSpec": "^0.7.1",
+    "saveSpec": null,
+    "fetchSpec": "^0.7.1"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/websockify/-/websockify-0.7.1.tgz",
+  "_shasum": "069e07100ae2439722076c9ff1d1f0347b0b91df",
+  "_spec": "websockify@^0.7.1",
+  "_where": "/home/alexey/Desktop/wowser3",
+  "author": {
+    "name": "Joel Martin",
+    "email": "github@martintribe.org",
+    "url": "http://github.com/kanaka"
+  },
+  "bin": {
+    "websockify": "./websockify.js"
+  },
+  "bugs": {
+    "url": "https://github.com/kanaka/websockify/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "optimist": "latest",
+    "policyfile": "latest",
+    "ws": ">=0.4.27"
+  },
+  "deprecated": false,
+  "description": "websockify is a WebSocket-to-TCP proxy/bridge",
+  "engines": {
+    "node": ">=0.8.9"
+  },
+  "files": [
+    "../../docs/LICENSE.LGPL-3",
+    "websockify.js"
+  ],
+  "homepage": "https://github.com/kanaka/websockify#readme",
+  "license": "LGPL-3.0",
+  "name": "websockify",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kanaka/websockify.git"
+  },
+  "version": "0.7.1"
+}
