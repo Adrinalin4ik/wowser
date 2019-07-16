@@ -1,3 +1,17 @@
+# Wowser
+
+[![Version](https://img.shields.io/npm/v/wowser.svg?style=flat)](https://www.npmjs.org/package/wowser)
+[![Join chat](https://img.shields.io/badge/gitter-join_chat-blue.svg?style=flat)](https://gitter.im/wowserhq/wowser)
+[![Build Status](https://img.shields.io/travis/wowserhq/wowser.svg?style=flat)](https://travis-ci.org/wowserhq/wowser)
+[![Dependency Status](https://img.shields.io/gemnasium/wowserhq/wowser.svg?style=flat)](https://gemnasium.com/wowserhq/wowser)
+[![Code Climate](https://img.shields.io/codeclimate/github/wowserhq/wowser.svg?style=flat)](https://codeclimate.com/github/wowserhq/wowser)
+[![Coverage](https://img.shields.io/codeclimate/coverage/github/wowserhq/wowser.svg?style=flat)](https://codeclimate.com/github/wowserhq/wowser)
+
+World of Warcraft in the browser using JavaScript and WebGL.
+
+Licensed under the **MIT** license, see LICENSE for more information.
+
+[![See Wowser tech demo](http://office.moonsphere.net/wowser-tech-demo.jpg)](https://www.youtube.com/watch?v=8QFY_3uM1iw)
 
 **How to launch**
 
@@ -7,6 +21,7 @@ For static debug
 npm run web-dev
 npm run gulp
 npm run serve
+
 ```
 
 -----------
@@ -27,20 +42,6 @@ npm run proxy 8086 95.181.139.52:8086
 
 Copy blizzardry and websockify to the node_modules
 
-# Wowser
-
-[![Version](https://img.shields.io/npm/v/wowser.svg?style=flat)](https://www.npmjs.org/package/wowser)
-[![Join chat](https://img.shields.io/badge/gitter-join_chat-blue.svg?style=flat)](https://gitter.im/wowserhq/wowser)
-[![Build Status](https://img.shields.io/travis/wowserhq/wowser.svg?style=flat)](https://travis-ci.org/wowserhq/wowser)
-[![Dependency Status](https://img.shields.io/gemnasium/wowserhq/wowser.svg?style=flat)](https://gemnasium.com/wowserhq/wowser)
-[![Code Climate](https://img.shields.io/codeclimate/github/wowserhq/wowser.svg?style=flat)](https://codeclimate.com/github/wowserhq/wowser)
-[![Coverage](https://img.shields.io/codeclimate/coverage/github/wowserhq/wowser.svg?style=flat)](https://codeclimate.com/github/wowserhq/wowser)
-
-World of Warcraft in the browser using JavaScript and WebGL.
-
-Licensed under the **MIT** license, see LICENSE for more information.
-
-[![See Wowser tech demo](http://office.moonsphere.net/wowser-tech-demo.jpg)](https://www.youtube.com/watch?v=8QFY_3uM1iw)
 
 ## Background
 
