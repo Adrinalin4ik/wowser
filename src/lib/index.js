@@ -22,8 +22,8 @@ class Client extends EventEmitter {
     this.game = new GameHandler(this);
     this.characters = new CharactersHandler(this);
     this.chat = new ChatHandler(this);
-    this.player = new Player();
     this.world = new WorldHandler(this);
+    this.player = new Player(this.world);
     this.enemyHandler = new EnemyHandler(this);
     this.gameObjecthandler = new GameObjectHandler(this);
   }

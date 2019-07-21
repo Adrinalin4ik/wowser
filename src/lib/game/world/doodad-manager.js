@@ -11,8 +11,9 @@ class DoodadManager {
   // Number of milliseconds to wait before loading another portion of doodads.
   static LOAD_INTERVAL = 1;
 
-  constructor(view, zeropoint) {
-    this.view = view;
+  constructor(map, zeropoint) {
+    this.map = map;
+    this.view = map.exterior;
     this.zeropoint = zeropoint;
 
     this.chunkRefs = new Map();
@@ -212,6 +213,7 @@ class DoodadManager {
     this.view.add(doodad);
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
+    // this.map.collidableMeshList.push(doodad);
   }
 
   animate(delta, camera, cameraMoved) {

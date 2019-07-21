@@ -22,7 +22,7 @@ class Wowser extends React.Component {
   constructor() {
     super();
 
-    // session.screen = GameScreen.id;
+    session.screen = GameScreen.id;
     this.state = {
       screen: session.screen
     };

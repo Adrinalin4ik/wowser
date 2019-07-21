@@ -44,7 +44,6 @@ class WMOManager {
       const wmoEntry = wmoEntries[i];
 
       this.addChunkRef(chunkIndex, wmoEntry);
-
       this.cancelUnloadEntry(wmoEntry);
       this.enqueueLoadEntry(wmoEntry);
     }
@@ -55,7 +54,6 @@ class WMOManager {
       const wmoEntry = wmoEntries[i];
 
       const refCount = this.removeChunkRef(chunkIndex, wmoEntry);
-
       // Still has a chunk reference; don't queue for unload.
       if (refCount > 0) {
         continue;
@@ -173,7 +171,7 @@ class WMOManager {
     this.counters.loadingDoodads -= wmo.counters.loadingDoodads;
     this.counters.loadedDoodads -= wmo.counters.loadedDoodads;
     this.counters.animatedDoodads -= wmo.counters.animatedDoodads;
-
+    // this.view.collidableMeshList.splice(this.view.collidableMeshList.findIndex(x => x.uuid = entry.uuid),1);
     wmo.unload();
   }
 
@@ -184,7 +182,8 @@ class WMOManager {
 
     wmo.load().then(() => {
       this.placeWMOView(entry, wmo.views.root);
-
+      // console.log(wmo)
+      // this.view.collidableMeshList.push(...[...[...wmo.doodads.values()].map(x => x.mesh.children)]);
       this.counters.loadingEntries--;
       this.counters.loadedEntries++;
     });

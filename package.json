@@ -33,6 +33,7 @@
     "wow"
   ],
   "dependencies": {
+    "ammojs": "0.0.2",
     "array-find": "^0.1.1",
     "blizzardry": "^0.4.0",
     "bluebird": "^2.10.0",

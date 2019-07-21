@@ -73,15 +73,39 @@ class Stats extends React.Component {
         <p>
           Z: { player ? Math.round(player.position.z) : 0 }
         </p>
+        <h2>Player state</h2>
+        <div className="divider"></div>
+        <p>
+          Ground distance: { player ? player.groundDistance.toFixed(2) : 0 }
+        </p>
+        <p>
+          Is on ground: { player ? player.isOnGround.toString() : false }
+        </p>
+        <p>
+          Is moving: { player ? player.isMoving.toString() : false }
+        </p>
+        <p>
+          Is jump: { player ? player.isJump.toString() : false }
+        </p>
       </div>
     );
   }
 
   mapStats() {
     const map = this.state.map;
+    let collidableMeshList = null;
+    if (map) {
+      collidableMeshList = map.collidableMeshList;
+    }
 
     return (
       <div>
+        <h2>Colliders</h2>
+        <div className="divider"></div>
+        <p>
+          Colliders loaded: { collidableMeshList ? collidableMeshList.length : 0 }
+        </p>
+        <div className="divider"></div>
         <h2>Map Chunks</h2>
         <div className="divider"></div>
         <p>

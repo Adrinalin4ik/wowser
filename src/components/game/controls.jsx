@@ -83,6 +83,10 @@ class Controls extends React.Component {
     const delta = this.clock.getDelta();
 
     if (this.unit) {
+      if (key.isPressed('space')) {
+        unit.jump();
+      }
+
       if (key.isPressed('up') || key.isPressed('w')) {
         unit.moveForward(delta);
       }
@@ -99,9 +103,9 @@ class Controls extends React.Component {
         unit.strafeRight(delta);
       }
 
-      if (key.isPressed('space')) {
-        unit.ascend(delta);
-      }
+      // if (key.isPressed('space')) {
+      //   unit.ascend(delta);
+      // }
 
       if (key.isPressed('x')) {
         unit.descend(delta);

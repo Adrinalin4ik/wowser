@@ -2,8 +2,8 @@ import Unit from './unit';
 
 class Player extends Unit {
 
-  constructor() {
-    super();
+  constructor(world) {
+    super(world);
 
     this.name = 'Player';
     this.hp = this.hp;
@@ -11,8 +11,18 @@ class Player extends Unit {
     this.remote = false;
     this.target = null;
 
-    this.displayID = 24978;
+    this.displayID = 24641;
     this.mapID = null;
+    this.velocity = 9.8;
+  }
+
+  jump() {
+    if (this.isOnGround) {
+      this.isJump = true;
+      this.jumpSpeed = this.jumpSpeedConst;
+      this.setAnimation(15, true);
+      // this.strafeUp(0.2);
+    }
   }
 
   worldport(mapID, x, y, z) {

@@ -19,7 +19,7 @@ class AnimationManager extends EventEmitter {
     this.loadedSequences = {};
 
     this.mixer = new THREE.AnimationMixer(root);
-
+    this.currentAnimation = null;
     // M2 animations are keyframed in milliseconds.
     this.mixer.timeScale = 1000.0;
 
@@ -45,7 +45,6 @@ class AnimationManager extends EventEmitter {
     const action = this.mixer.clipAction(clip);
 
     this.loadedAnimations[animationIndex] = action;
-
     return action;
   }
 
@@ -63,8 +62,10 @@ class AnimationManager extends EventEmitter {
     return;
   }
 
-  playAnimation(animationIndex) {
+  playAnimation(animationIndex, repetitions = Infinity) {
     const action = this.loadAnimation(animationIndex);
+    action.repetitions = repetitions;
+    this.currentAnimation = action;
     action.play();
   }
 
@@ -105,8 +106,9 @@ class AnimationManager extends EventEmitter {
     return;
   }
 
-  playSequence(sequenceIndex) {
+  playSequence(sequenceIndex, repetitions = Infinity) {
     const action = this.loadSequence(sequenceIndex);
+    action.repetitions = repetitions;
     action.play();
   }
 

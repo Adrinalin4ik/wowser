@@ -17,20 +17,20 @@ class WorldMap extends THREE.Group {
   static CHUNKS_PER_ROW = 64 * 16;
 
   // Controls when ADT chunks are loaded and unloaded from the map.
-  static CHUNK_RENDER_RADIUS = 6;
+  static CHUNK_RENDER_RADIUS = 1;
 
   constructor(data, wdt) {
     super();
 
     this.matrixAutoUpdate = false;
-
+    this.name = 'WorldMap';
     this.exterior = new THREE.Group();
     this.exterior.name = 'ExteriorView';
     this.add(this.exterior);
 
     // Set up geometry managers
-    this.terrainManager = new TerrainManager(this.exterior, this.constructor.ZEROPOINT);
-    this.doodadManager = new DoodadManager(this.exterior, this.constructor.ZEROPOINT);
+    this.terrainManager = new TerrainManager(this, this.constructor.ZEROPOINT);
+    this.doodadManager = new DoodadManager(this, this.constructor.ZEROPOINT);
     this.wmoManager = new WMOManager(this, this.constructor.ZEROPOINT);
     this.worldLight = new WorldLight();
     this.visibilityManager = new VisibilityManager(this);
@@ -133,8 +133,8 @@ class WorldMap extends THREE.Group {
     this.wmoManager.animate(delta, camera, cameraMoved);
   }
 
-  updateWorldTime(camera, mapID, time){
-    WorldLight.update(camera, mapID, time)
+  updateWorldTime(camera, mapID, time) {
+    WorldLight.update(camera, mapID, time);
   }
 
   locateCamera(camera) {
@@ -149,7 +149,7 @@ class WorldMap extends THREE.Group {
     return DBC.load('Map', id).then((data) => {
       const { internalName: name } = data;
       return WDT.load(`World\\Maps\\${name}\\${name}.wdt`).then((wdt) => {
-        console.log("Map loaded", wdt);
+        console.log('Map loaded', wdt);
         return new this(data, wdt);
       });
     });
