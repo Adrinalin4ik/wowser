@@ -210,10 +210,18 @@ class DoodadManager {
     }
 
     // Add doodad to world map.
-    this.view.add(doodad);
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
-    // this.map.collidableMeshList.push(doodad);
+
+    for (const object of doodad.children) {
+      if (object.type === "Mesh") {
+        this.map.collidableMeshList.push(object);
+      } else {
+        this.map.collidableMeshList.push(...object.children);
+      }
+    }
+    
+    this.view.add(doodad);
   }
 
   animate(delta, camera, cameraMoved) {

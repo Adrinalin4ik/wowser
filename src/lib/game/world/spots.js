@@ -2,7 +2,7 @@ const Spots = [
   {
     id: 'Mob test',
     title: 'Mob test',
-    coords: [0, -9299, -1419, 96]
+    coords: [0, -9256, -2221, 76]
   },
   {
     id: 'stormwind',

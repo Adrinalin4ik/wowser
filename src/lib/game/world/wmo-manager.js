@@ -166,12 +166,16 @@ class WMOManager {
     this.entries.delete(entry.id);
     this.counters.loadedEntries--;
 
+    // for (const obj of wmo.views.root.children) {
+    //   this.view.collidableMeshList.splice(this.view.collidableMeshList.findIndex(x => x.uuid = obj.uuid), 1);
+    // }
+
+
     this.counters.loadingGroups -= wmo.counters.loadingGroups;
     this.counters.loadedGroups -= wmo.counters.loadedGroups;
     this.counters.loadingDoodads -= wmo.counters.loadingDoodads;
     this.counters.loadedDoodads -= wmo.counters.loadedDoodads;
     this.counters.animatedDoodads -= wmo.counters.animatedDoodads;
-    // this.view.collidableMeshList.splice(this.view.collidableMeshList.findIndex(x => x.uuid = entry.uuid),1);
     wmo.unload();
   }
 
@@ -182,8 +186,6 @@ class WMOManager {
 
     wmo.load().then(() => {
       this.placeWMOView(entry, wmo.views.root);
-      // console.log(wmo)
-      // this.view.collidableMeshList.push(...[...[...wmo.doodads.values()].map(x => x.mesh.children)]);
       this.counters.loadingEntries--;
       this.counters.loadedEntries++;
     });
@@ -211,7 +213,9 @@ class WMOManager {
 
     view.updateMatrix();
     view.updateMatrixWorld();
-
+    setTimeout(() => {
+      this.view.collidableMeshList.push(...view.children);
+    }, 5000);
     this.view.add(view);
   }
 

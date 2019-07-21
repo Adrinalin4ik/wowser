@@ -45,6 +45,8 @@ class WorldMap extends THREE.Group {
 
     this.queuedChunks = new Map();
     this.chunks = new Map();
+
+    this.collidableMeshList = [];
   }
 
   get internalName() {

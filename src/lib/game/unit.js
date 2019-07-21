@@ -354,9 +354,6 @@ class Unit extends Entity {
     this.counter++;
     const diff = Math.abs(this._groundFollowConstant - 0.1 - this.groundDistance);
     if ((this.groundDistance > this._groundFollowConstant - 0.1) && !this.isJump) {
-      // this.view.translateZ(-diff*0.2);
-      // this.view.translateZ(-0.01);
-      // this.view.position.z -= this.groundDistance
       this.translatePosition({ z: -diff * 0.1 });
     } else {
       if (this.isOnGround) {
@@ -368,7 +365,6 @@ class Unit extends Entity {
       }
 
       if (this.groundDistance < this._groundFollowConstant - 0.2) {
-        // this.view.translateZ(diff*0.2);
         this.translatePosition({ z: diff * 0.1 });
       }
     }
@@ -376,57 +372,15 @@ class Unit extends Entity {
 
   delta = 0;
   updateGravity(delta) {
-    // this.counter++;
-    // if (!this.isOnGround) {
-    
-    // }
     if (this.isJump && this.jumpSpeed > 0) {
-      // this.translatePosition({ z: Math.sin(delta*1.2) });
       this.translatePosition({ z: this.jumpSpeed });
-      // this.view.translateZ(this.jumpSpeed);
-      // console.log(Math.sin(this.jumpSpeedConst - this.jumpSpeed));
-      // console.log(this.jumpSpeedConst - this.jumpSpeed);
       this.jumpSpeed -= 0.01;
     }
-
-    // if (this.jumpSpeed <= 0 && this.isJump && this.isOnGround) {
-    //   this.isJump = false;
-    // }
-
-    // if (this.jumpSpeed < 0){
-    //   this.isJump = false;
-    // }
 
     if (this.isJump && !this.isOnGround) {
       this.setAnimation(31, true);
       this.translatePosition({ z: -0.1 });
     }
-    // if (this.isCollides) {
-    //   console.log('up')
-    //   this.view.translateZ(5 * delta);
-    // }
-    // if (!this.isOnGround && this.isJump) {
-    //   // this.strafeDown(delta);
-    //   this.translatePosition({ z: -0.1 });
-    //   // this.view.translateZ(-0.1);
-    // }
-
-    // if (!this.isOnGround) {
-    //   // this.strafeDown(delta);
-    //   this.translatePosition({ z: -0.1 });
-    //   // this.view.translateZ(-0.1);
-    // }
-    // if (this.groundDistance < 3 && this.isJump) {
-    //   this.setAnimation(16, true);
-    // }
-    // } else {
-    //   if (this.groundDistance < 0.3) {
-    //     const diff = Math.abs(this.previousGroundDistance - this.groundDistance);
-    //     // console.log(diff);
-    //     // this.view.position.z += diff;
-    //     this.translatePosition({ z: this.groundDistance });
-    //   }
-    // }
 
     this.updateGroundFolow();
   }

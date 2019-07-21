@@ -98,7 +98,6 @@ class WorldHandler extends EventEmitter {
       this.scene.add(this.map);
       this.renderAtCoords(this.player.position.x, this.player.position.y);
       this.player.emit('map:changed', this.map);
-      this.map.collidableMeshList = [];
 
       // const wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
       // const wallMaterial = new THREE.MeshBasicMaterial( {color: 0x5888ff} );
