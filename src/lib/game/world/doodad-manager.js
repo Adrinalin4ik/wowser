@@ -213,13 +213,13 @@ class DoodadManager {
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
 
-    for (const object of doodad.children) {
-      if (object.type === "Mesh") {
-        this.map.collidableMeshList.push(object);
-      } else {
-        this.map.collidableMeshList.push(...object.children);
-      }
-    }
+    // for (const object of doodad.children) {
+    //   if (object.type === "Mesh") {
+    //     this.map.collidableMeshList.push(object);
+    //   } else {
+    //     this.map.collidableMeshList.push(...object.children);
+    //   }
+    // }
     
     this.view.add(doodad);
   }

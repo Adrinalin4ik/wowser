@@ -145,9 +145,9 @@ export default new r.Struct({
   maxBoundingBox: Vec3Float,
   boundingRadius: r.floatle,
 
-  boundingTriangles: new Nofs(),
-  boundingVertices: new Nofs(),
-  boundingNormals: new Nofs(),
+  boundingTriangles: new Nofs(r.uint16le),
+  boundingVertices: new Nofs(Vec3Float),
+  boundingNormals: new Nofs(Vec3Float),
   attachments: new Nofs(),
   attachmentLookups: new Nofs(),
   events: new Nofs(),

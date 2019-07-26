@@ -297,12 +297,16 @@ class WMO {
 
     // Adjust doodad rotation to match Wowser's axes.
     const quat = doodad.quaternion;
+    doodad.boundingMesh.quaternion.set(rotation.x, rotation.y, -rotation.z, -rotation.w);
     quat.set(rotation.x, rotation.y, -rotation.z, -rotation.w);
 
     doodad.scale.set(scale, scale, scale);
 
     // Add to scene and update matrices
     this.views.root.add(doodad);
+    this.views.root.add(doodad.boundingMesh);
+    doodad.boundingMesh.updateMatrix();
+    doodad.boundingMesh.updateMatrixWorld();
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
   }

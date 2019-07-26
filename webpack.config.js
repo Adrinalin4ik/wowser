@@ -15,6 +15,12 @@ module.exports = {
     root: path.join(__dirname, 'node_modules')
   },
   module: {
+    rules: [
+      {
+        test: /\.exec\.jsx$/,
+        use: ['script-loader']
+      }
+    ],
     loaders: [
       {
         test: /\.json$/,

@@ -17,7 +17,7 @@ class TerrainManager {
   unloadChunk(_index, terrain) {
     this.view.remove(terrain);
     terrain.dispose();
-    // this.map.collidableMeshList.splice(this.map.collidableMeshList.findIndex(x => x.uuid = terrain.uuid), 1);
+    this.map.collidableMeshList.splice(this.map.collidableMeshList.findIndex(x => x.uuid = terrain.uuid), 1);
   }
 
   animate(delta, camera, cameraMoved) {

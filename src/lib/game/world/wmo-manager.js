@@ -206,7 +206,6 @@ class WMOManager {
       rotation.x * Math.PI / 180,
       -rotation.y * Math.PI / 180
     );
-
     // Adjust WMO rotation to match Wowser's axes.
     const quat = view.quaternion;
     quat.set(quat.x, quat.y, quat.z, -quat.w);
@@ -214,7 +213,21 @@ class WMOManager {
     view.updateMatrix();
     view.updateMatrixWorld();
     setTimeout(() => {
-      this.view.collidableMeshList.push(...view.children);
+      console.log(view, entry);
+      for(const item of view.children) {
+        if (item.boundingMesh) {
+          // console.log('Item', item)
+          // if (item.name === 'BoundingMesh') {
+            // console.log("Here", item);
+            // item.boundingMesh.position.set(item.parent.position.x, item.parent.position.y, item.parent.position.z);
+            // this.view.collidableMeshList.push(item.boundingMesh);
+            // window['h'].scene.add(item.boundingMesh);
+          // }
+          // this.view.collidableMeshList.push(item);
+          // item.boundingMesh.position.set(view.position.x,view.position.y,view.position.z);
+          // console.log(item);
+        }
+      }
     }, 5000);
     this.view.add(view);
   }

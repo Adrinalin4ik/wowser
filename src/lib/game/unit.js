@@ -20,7 +20,7 @@ class Unit extends Entity {
     this.mp = 0;
 
     this.rotateSpeed = 2;
-    this.moveSpeed = 10;
+    this.moveSpeed = 60;
     this.fallSpeed = 0.3;
     this._view = new THREE.Group();
 

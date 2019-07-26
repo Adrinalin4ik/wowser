@@ -5,22 +5,73 @@ import M2Material from './material';
 import AnimationManager from './animation-manager';
 import BatchManager from './batch-manager';
 
+
+// import * as earcut from '../../../../public/earcut';
+// import * as triangulation from '../../../../public/triangulation'
+// import * as loader from '../../../../publicloader';
+
 class M2 extends THREE.Group {
 
   static cache = {};
 
+  createBoundingMesh(vertices) {
+    let mesh;
+    
+    const material = new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0 });
+    const geometry = new THREE.Geometry();
+    // const geometry = new THREE.BufferGeometry();
+
+    // const verts = [];
+    for (let vertexIndex = 0, len = vertices.length; vertexIndex < len; ++vertexIndex) {
+      const vertex = vertices[vertexIndex];
+      // verts.push(vertex.x, vertex.y, vertex.z);
+      geometry.vertices.push(
+        // Provided as (X, Z, -Y)
+        new THREE.Vector3(vertex.x, vertex.y, -vertex.z)
+      );
+    }
+
+    // const holes = [];
+
+    // let triangles = [];
+    // triangles = THREE.ShapeUtils.triangulateShape(geometry.vertices, holes);
+
+    for (const i = 0; i < this.boundingTriangles.length; i+=3) {
+      geometry.faces.push(new THREE.Face3(this.boundingTriangles[i], 
+                                          this.boundingTriangles[i+1], 
+                                          this.boundingTriangles[i+2]));
+    }
+    // geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array(verts), vertices.length ));
+    // geometry.faces.push( new THREE.Face3( 0, 1, 2));
+    // geometry.computeBoundingSphere();
+    const matrix = new THREE.Matrix4();
+    matrix.makeScale(-1, 1, 1);
+    geometry.applyMatrix(matrix);
+    geometry.rotateX(-Math.PI);
+    // const geometry = new THREE.CubeGeometry(1,1,4);
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.name = 'BoundingMesh';
+    mesh.matrixAutoUpdate = this.matrixAutoUpdate;
+
+    // Never display the mesh
+    // TODO: We shouldn't really even have this mesh in the first place, should we?
+    mesh.visible = true;
+    this.add(mesh);
+    // Add mesh to the group
+    return mesh;
+  }
+
   constructor(path, data, skinData, instance = null) {
     super();
+
     this.matrixAutoUpdate = false;
 
     this.eventListeners = [];
 
     this.name = path.split('\\').slice(-1).pop();
-
     this.path = path;
     this.data = data;
     this.skinData = skinData;
-
     this.batchManager = new BatchManager();
 
     // Instanceable M2s share geometry, texture units, and animations.
@@ -29,7 +80,9 @@ class M2 extends THREE.Group {
     this.animated = data.animated;
 
     this.billboards = [];
-
+    this.boundingVertices = data.boundingVertices;
+    this.boundingNormals = data.boundingNormals;
+    this.boundingTriangles = data.boundingTriangles;
     // Keep track of whether or not to use skinning. If the M2 has bone animations, useSkinning is
     // set to true, and all meshes and materials used in the M2 will be skinning enabled. Otherwise,
     // skinning will not be enabled. Skinning has a very significant impact on the render loop in
@@ -79,6 +132,10 @@ class M2 extends THREE.Group {
     this.createMesh(this.geometry, this.skeleton, this.rootBones);
     this.createSubmeshes(data, skinData);
     this.geometry.computeBoundingBox();
+    this.boundingMesh = this.createBoundingMesh(this.boundingVertices);
+
+    // console.log('M2', this);
+
   }
 
   createSkeleton(boneDefs) {
@@ -132,7 +189,7 @@ class M2 extends THREE.Group {
           animationBlock: boneDef.translation,
           trackType: 'VectorKeyframeTrack',
 
-          valueTransform: function(value) {
+          valueTransform(value) {
             return [
               bone.position.x + -value[0],
               bone.position.y + -value[1],
@@ -150,7 +207,7 @@ class M2 extends THREE.Group {
           animationBlock: boneDef.rotation,
           trackType: 'QuaternionKeyframeTrack',
 
-          valueTransform: function(value) {
+          valueTransform(value) {
             return [value[0], value[1], -value[2], -value[3]];
           }
         });
@@ -342,8 +399,8 @@ class M2 extends THREE.Group {
 
     const opts = {
       skeleton: this.skeleton,
-      geometry: geometry,
-      rootBone: rootBone,
+      geometry,
+      rootBone,
       useSkinning: this.useSkinning,
       matrixAutoUpdate: this.matrixAutoUpdate
     };
@@ -428,7 +485,7 @@ class M2 extends THREE.Group {
         animationBlock: transparencyAnimationDef,
         trackType: 'NumberKeyframeTrack',
 
-        valueTransform: function(value) {
+        valueTransform(value) {
           return [value];
         }
       });
@@ -462,7 +519,7 @@ class M2 extends THREE.Group {
         animationBlock: alpha,
         trackType: 'NumberKeyframeTrack',
 
-        valueTransform: function(value) {
+        valueTransform(value) {
           return [value];
         }
       });

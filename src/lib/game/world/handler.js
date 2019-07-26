@@ -23,7 +23,7 @@ class WorldHandler extends EventEmitter {
     this.changeMap = ::this.changeMap;
     this.changeModel = ::this.changeModel;
     this.changePosition = ::this.changePosition;
-
+    window['h'] = this;
     this.entities = new Set();
     this.add(this.player);
     console.log('Handler', this);
@@ -36,7 +36,8 @@ class WorldHandler extends EventEmitter {
       console.log(this.player.zone, this.player.x, this.player.y, this.player.z);
       this.player.worldport(this.player.map, this.player.x, this.player.y, this.player.z);
     } else {
-      this.player.worldport(...spots[0].coords);
+      this.player.worldport(0, -9430, -1324, 60);
+      // this.player.worldport(...spots[0].coords);
 
       // const wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
       // const wallMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff} );
