@@ -4,7 +4,6 @@ import THREE from 'three';
 import M2Blueprint from '../../pipeline/m2/blueprint';
 import WorldMap from './map';
 import spots from './spots';
-import Ammo from 'ammojs';
 class WorldHandler extends EventEmitter {
 
   constructor(session) {
@@ -12,7 +11,6 @@ class WorldHandler extends EventEmitter {
     this.session = session;
   }
   connect() {
-    this.ammo = Ammo;
     this.player = this.session.player;
 
     this.scene = new THREE.Scene();
