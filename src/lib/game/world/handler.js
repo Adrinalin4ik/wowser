@@ -19,20 +19,23 @@ class WorldHandler extends EventEmitter {
     this.scene.matrixAutoUpdate = true;
 
     this.map = null;
-    // this.map.collidableMeshList = [];
     this.changeMap = ::this.changeMap;
     this.changeModel = ::this.changeModel;
     this.changePosition = ::this.changePosition;
-    window['h'] = this;
-    this.entities = new Set();
-    this.add(this.player);
+
+    // for debug purposes only
+    window['h'] = this; 
     console.log('Handler', this);
     console.log('SCENE', this.scene);
+    /////////////////////////
+
+    this.entities = new Set();
+    this.add(this.player);
     this.player.on('map:change', this.changeMap);
     this.player.on('position:change', this.changePosition);
 
 
-    if (this.player.remote) {
+    if (this.player.remote) { //if get some info from server
       console.log(this.player.zone, this.player.x, this.player.y, this.player.z);
       this.player.worldport(this.player.map, this.player.x, this.player.y, this.player.z);
     } else {
@@ -67,7 +70,7 @@ class WorldHandler extends EventEmitter {
     this.entities.add(entity);
     if (entity.view) {
       this.scene.add(entity.view);
-      // this.scene.add(entity.collider);
+      // this.scene.add(entity.collider); // if you want to see the player collider
       this.scene.add(entity.arrow);
  
       entity.on('model:change', this.changeModel);
@@ -99,18 +102,6 @@ class WorldHandler extends EventEmitter {
       this.scene.add(this.map);
       this.renderAtCoords(this.player.position.x, this.player.position.y);
       this.player.emit('map:changed', this.map);
-
-      // const wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
-      // const wallMaterial = new THREE.MeshBasicMaterial( {color: 0x5888ff} );
-      
-      // const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
-      // wall2.position.set(...[-9455, -1369, 40]);
-      // wall2.rotation.y = 3.14159 / 2;
-      // console.log("Wall", wall2)
-      // this.scene.add(wall2);
-      // this.map.collidableMeshList.push(wall2);
-
-      console.log("collidableMeshList", this.map.collidableMeshList)
     });
   }
 
@@ -148,8 +139,6 @@ class WorldHandler extends EventEmitter {
         return;
       }
 
-      // entity.updateCollider(this.map.collidableMeshList);
-      // entity.updateGroundDistance(this.map.collidableMeshList);
       entity.update(delta);
 
       if (model.receivesAnimationUpdates && model.animations.length > 0) {

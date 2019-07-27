@@ -1,4 +1,4 @@
-import MPQ from 'blizzardry/lib/mpq';
+import MPQ from '../../../../blizzardry/lib/mpq';
 import glob from 'globby';
 
 class Archive {

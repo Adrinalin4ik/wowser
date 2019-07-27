@@ -213,8 +213,9 @@ class WMOManager {
     view.updateMatrix();
     view.updateMatrixWorld();
     setTimeout(() => {
-      console.log(view, entry);
+      // console.log(view, entry);
       for(const item of view.children) {
+        this.view.collidableMeshList.push(item);
         if (item.boundingMesh) {
           // console.log('Item', item)
           // if (item.name === 'BoundingMesh') {
@@ -229,6 +230,7 @@ class WMOManager {
         }
       }
     }, 5000);
+
     this.view.add(view);
   }
 

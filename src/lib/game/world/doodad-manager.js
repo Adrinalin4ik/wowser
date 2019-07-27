@@ -212,14 +212,7 @@ class DoodadManager {
     // Add doodad to world map.
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
-
-    // for (const object of doodad.children) {
-    //   if (object.type === "Mesh") {
-    //     this.map.collidableMeshList.push(object);
-    //   } else {
-    //     this.map.collidableMeshList.push(...object.children);
-    //   }
-    // }
+    this.map.collidableMeshList.push(doodad.boundingMesh);
     
     this.view.add(doodad);
   }

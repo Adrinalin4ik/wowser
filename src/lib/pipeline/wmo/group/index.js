@@ -8,7 +8,6 @@ class WMOGroup {
 
   constructor(root, def) {
     this.root = root;
-
     this.path = def.path;
     this.index = def.index;
     this.id = def.groupID;
@@ -66,7 +65,7 @@ class WMOGroup {
     geometry.addAttribute('acolor', new THREE.BufferAttribute(colors, 4));
 
     geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-    // geometry.computeBoundingBox();
+    geometry.computeBoundingBox();
     this.assignBatches(geometry, batches);
 
     return geometry;

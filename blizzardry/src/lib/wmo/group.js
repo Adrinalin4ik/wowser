@@ -81,6 +81,18 @@ const MODR = Chunk({
   doodadIndices: new r.Array(r.int16le, 'size', 'bytes')
 });
 
+
+const MOBN = Chunk({
+  data: new r.Struct({
+    flags: r.uint16le,
+    negChild: r.int16le,
+    posChild: r.int16le,
+    nFaces: r.uint16le,
+    faceStart: r.uint32le,
+    planeDist: r.floatle
+  })
+});
+
 export default Chunked({
   MOGP: MOGP,
   MOPY: MOPY,
@@ -100,7 +112,7 @@ export default Chunked({
   MODR: new r.Optional(MODR, function() {
     return this.flags & 0x800;
   }),
-  MOBN: new r.Optional(SkipChunk, function() {
+  MOBN: new r.Optional(MOBN, function() {
     return this.flags & 0x1;
   }),
   MOBR: new r.Optional(SkipChunk, function() {

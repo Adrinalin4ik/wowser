@@ -20,13 +20,14 @@ class Unit extends Entity {
     this.mp = 0;
 
     this.rotateSpeed = 2;
-    this.moveSpeed = 60;
+    this.moveSpeed = 10;
     this.fallSpeed = 0.3;
     this._view = new THREE.Group();
 
     this._displayID = 0;
     this._model = null;
-
+    
+    // START COLLIDER
     const playerGeometry = new THREE.CubeGeometry(0, 0, 0);
     // const playerMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff});
     const playerMaterial = new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0 });
@@ -36,28 +37,24 @@ class Unit extends Entity {
     // playerMesh.position.set(this.position.x, this.position.y, this.position.z);
     // this.collider.position.set(...[-9455, -1369, 40]);
     this.collider.name = 'Collider';
+    // END COLLIDER
+    
+    // START GROUND DISTANCE
     this.isFly = true;
     this.isCollides = false;
     this.groundDistance = 0;
     this.groundZeroConstant = 3; // точка с которой будет считаться что мы на земле
-    this._groundFollowConstant = 2;
-    // Вертикально
+    this._groundFollowConstant = 2; // точка с которой нужно начинать следовать рельефу
+    this.previousGroundDistance = 0;
+
     this.groundDistanceRaycaster = new THREE.Raycaster();
+    this.groundDistanceRaycaster.set(this.position, this.view.rotation);
 
     this.arrow = new THREE.ArrowHelper(this.groundDistanceRaycaster.ray.direction, this.groundDistanceRaycaster.ray.origin, 100, 0x8888ff);
     this.arrow.setDirection(this.groundDistanceRaycaster.ray.direction);
 
-    // Вперед
-    this.groundDistanceRaycasterUp = new THREE.Raycaster();
-    this.arrowUp = new THREE.ArrowHelper(this.groundDistanceRaycasterUp.ray.direction, this.groundDistanceRaycasterUp.ray.origin, 100, 0x8888ff);
-    this.arrowUp.setDirection(this.groundDistanceRaycasterUp.ray.direction);
-
-    console.log(this);
-    this.groundDistanceRaycaster.set(this.position, this.view.rotation);
-
-    this.previousGroundDistance = 0;
     this.isMoving = false;
-
+    // END GROUND DISTANCE
     // Jump
     this.isJump = false;
     this.jumpSpeedConst = 0.3;
@@ -65,13 +62,6 @@ class Unit extends Entity {
 
     // Animation
     this.currentAnimationIndex = 0;
-
-
-    this.counter = 0;
-    // setInterval(() => {
-    //   console.log(this.counter);
-    //   this.counter = 0;
-    // }, 1000);
   }
 
   get position() {
@@ -170,7 +160,6 @@ class Unit extends Entity {
         16 - grounding
         31 - fall
        */
-      console.log(m2.animations);
       m2.animations.playAnimation(this.currentAnimationIndex, 0);
       m2.animations.playAllSequences();
     }
@@ -351,7 +340,6 @@ class Unit extends Entity {
 
   // Обеспецивает хождение по земле
   updateGroundFolow(vector) {
-    this.counter++;
     const diff = Math.abs(this._groundFollowConstant - 0.1 - this.groundDistance);
     if ((this.groundDistance > this._groundFollowConstant - 0.1) && !this.isJump) {
       this.translatePosition({ z: -diff * 0.1 });

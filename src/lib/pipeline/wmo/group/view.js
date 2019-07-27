@@ -4,7 +4,6 @@ class WMOGroupView extends THREE.Mesh {
 
   constructor(group, geometry, material) {
     super();
-
     this.matrixAutoUpdate = false;
 
     this.group = group;

@@ -1,5 +1,5 @@
-import { DecodeStream } from 'blizzardry/lib/restructure';
-import WMOGroup from 'blizzardry/lib/wmo/group';
+import { DecodeStream } from '../../../../../../blizzardry/lib/restructure';
+import WMOGroup from '../../../../../../blizzardry/lib/wmo/group';
 
 import Loader from '../../../../net/loader';
 import WMOGroupDefinition from './definition';
@@ -12,7 +12,7 @@ export default function(path, index, rootHeader) {
     const stream = new DecodeStream(buffer);
 
     const groupData = WMOGroup.decode(stream);
-
+    console.log(groupData);
     const def = new WMOGroupDefinition(path, index, rootHeader, groupData);
 
     return def;

@@ -5,61 +5,9 @@ import M2Material from './material';
 import AnimationManager from './animation-manager';
 import BatchManager from './batch-manager';
 
-
-// import * as earcut from '../../../../public/earcut';
-// import * as triangulation from '../../../../public/triangulation'
-// import * as loader from '../../../../publicloader';
-
 class M2 extends THREE.Group {
 
   static cache = {};
-
-  createBoundingMesh(vertices) {
-    let mesh;
-    
-    const material = new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0 });
-    const geometry = new THREE.Geometry();
-    // const geometry = new THREE.BufferGeometry();
-
-    // const verts = [];
-    for (let vertexIndex = 0, len = vertices.length; vertexIndex < len; ++vertexIndex) {
-      const vertex = vertices[vertexIndex];
-      // verts.push(vertex.x, vertex.y, vertex.z);
-      geometry.vertices.push(
-        // Provided as (X, Z, -Y)
-        new THREE.Vector3(vertex.x, vertex.y, -vertex.z)
-      );
-    }
-
-    // const holes = [];
-
-    // let triangles = [];
-    // triangles = THREE.ShapeUtils.triangulateShape(geometry.vertices, holes);
-
-    for (const i = 0; i < this.boundingTriangles.length; i+=3) {
-      geometry.faces.push(new THREE.Face3(this.boundingTriangles[i], 
-                                          this.boundingTriangles[i+1], 
-                                          this.boundingTriangles[i+2]));
-    }
-    // geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array(verts), vertices.length ));
-    // geometry.faces.push( new THREE.Face3( 0, 1, 2));
-    // geometry.computeBoundingSphere();
-    const matrix = new THREE.Matrix4();
-    matrix.makeScale(-1, 1, 1);
-    geometry.applyMatrix(matrix);
-    geometry.rotateX(-Math.PI);
-    // const geometry = new THREE.CubeGeometry(1,1,4);
-    mesh = new THREE.Mesh(geometry, material);
-    mesh.name = 'BoundingMesh';
-    mesh.matrixAutoUpdate = this.matrixAutoUpdate;
-
-    // Never display the mesh
-    // TODO: We shouldn't really even have this mesh in the first place, should we?
-    mesh.visible = true;
-    this.add(mesh);
-    // Add mesh to the group
-    return mesh;
-  }
 
   constructor(path, data, skinData, instance = null) {
     super();
@@ -136,6 +84,42 @@ class M2 extends THREE.Group {
 
     // console.log('M2', this);
 
+  }
+
+  createBoundingMesh(vertices) {
+    let mesh;
+    
+    const material = new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0 });
+    const geometry = new THREE.Geometry();
+    // make geometry
+    for (let vertexIndex = 0, len = vertices.length; vertexIndex < len; ++vertexIndex) {
+      const vertex = vertices[vertexIndex];
+      geometry.vertices.push(
+        new THREE.Vector3(vertex.x, vertex.y, -vertex.z)
+      );
+    }
+
+    // Make faces
+    for (let i = 0; i < this.boundingTriangles.length; i += 3) {
+      geometry.faces.push(new THREE.Face3(this.boundingTriangles[i],
+                                          this.boundingTriangles[i + 1],
+                                          this.boundingTriangles[i + 2]));
+    }
+
+    // Rotate
+    const matrix = new THREE.Matrix4();
+    matrix.makeScale(-1, 1, 1);
+    geometry.applyMatrix(matrix);
+    geometry.rotateX(-Math.PI);
+
+    // Build mesh
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.name = 'BoundingMesh';
+    mesh.matrixAutoUpdate = this.matrixAutoUpdate;
+
+    mesh.visible = true;
+    this.add(mesh);
+    return mesh;
   }
 
   createSkeleton(boneDefs) {
