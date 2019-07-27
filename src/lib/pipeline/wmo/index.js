@@ -303,9 +303,9 @@ class WMO {
     doodad.scale.set(scale, scale, scale);
 
     // Add to scene and update matrices
-    // this.views.root.add(doodad);
-    // doodad.updateMatrix();
-    // doodad.updateMatrixWorld();
+    this.views.root.add(doodad);
+    doodad.updateMatrix();
+    doodad.updateMatrixWorld();
     // this.views.root.add(doodad.boundingMesh);
     // doodad.boundingMesh.updateMatrix();
     // doodad.boundingMesh.updateMatrixWorld();

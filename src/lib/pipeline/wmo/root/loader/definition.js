@@ -1,7 +1,6 @@
 class WMORootDefinition {
 
   constructor(path, data) {
-    console.log(data)
     this.path = path;
     this.rootID = data.MOHD.rootID;
 

@@ -99,16 +99,16 @@ var MODR = (0, _chunk2.default)({
   doodadIndices: new _restructure2.default.Array(_restructure2.default.int16le, 'size', 'bytes')
 });
 
-var MOBN = (0, _chunk2.default)({
-  data: new _restructure2.default.Struct({
-    flags: _restructure2.default.uint16le,
-    negChild: _restructure2.default.int16le,
-    posChild: _restructure2.default.int16le,
-    nFaces: _restructure2.default.uint16le,
-    faceStart: _restructure2.default.uint32le,
-    planeDist: _restructure2.default.floatle
-  })
-});
+// const MOBN = Chunk({
+//   data: new r.Struct({
+//     flags: r.uint16le,
+//     negChild: r.int16le,
+//     posChild: r.int16le,
+//     nFaces: r.uint16le,
+//     faceStart: r.uint32le,
+//     planeDist: r.floatle
+//   })
+// });
 
 exports.default = (0, _chunked2.default)({
   MOGP: MOGP,
@@ -129,7 +129,7 @@ exports.default = (0, _chunked2.default)({
   MODR: new _restructure2.default.Optional(MODR, function () {
     return this.flags & 0x800;
   }),
-  MOBN: new _restructure2.default.Optional(MOBN, function () {
+  MOBN: new _restructure2.default.Optional(_skipChunk2.default, function () {
     return this.flags & 0x1;
   }),
   MOBR: new _restructure2.default.Optional(_skipChunk2.default, function () {

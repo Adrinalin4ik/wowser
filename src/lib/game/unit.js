@@ -20,7 +20,7 @@ class Unit extends Entity {
     this.mp = 0;
 
     this.rotateSpeed = 2;
-    this.moveSpeed = 10;
+    this.moveSpeed = 60;
     this.fallSpeed = 0.3;
     this._view = new THREE.Group();
 
@@ -38,7 +38,7 @@ class Unit extends Entity {
     // this.collider.position.set(...[-9455, -1369, 40]);
     this.collider.name = 'Collider';
     // END COLLIDER
-    
+
     // START GROUND DISTANCE
     this.isFly = true;
     this.isCollides = false;

@@ -82,16 +82,16 @@ const MODR = Chunk({
 });
 
 
-const MOBN = Chunk({
-  data: new r.Struct({
-    flags: r.uint16le,
-    negChild: r.int16le,
-    posChild: r.int16le,
-    nFaces: r.uint16le,
-    faceStart: r.uint32le,
-    planeDist: r.floatle
-  })
-});
+// const MOBN = Chunk({
+//   data: new r.Struct({
+//     flags: r.uint16le,
+//     negChild: r.int16le,
+//     posChild: r.int16le,
+//     nFaces: r.uint16le,
+//     faceStart: r.uint32le,
+//     planeDist: r.floatle
+//   })
+// });
 
 export default Chunked({
   MOGP: MOGP,
@@ -112,7 +112,7 @@ export default Chunked({
   MODR: new r.Optional(MODR, function() {
     return this.flags & 0x800;
   }),
-  MOBN: new r.Optional(MOBN, function() {
+  MOBN: new r.Optional(SkipChunk, function() {
     return this.flags & 0x1;
   }),
   MOBR: new r.Optional(SkipChunk, function() {
