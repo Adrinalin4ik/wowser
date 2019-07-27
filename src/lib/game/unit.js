@@ -20,13 +20,13 @@ class Unit extends Entity {
     this.mp = 0;
 
     this.rotateSpeed = 2;
-    this.moveSpeed = 60;
+    this.moveSpeed = 10;
     this.fallSpeed = 0.3;
     this._view = new THREE.Group();
 
     this._displayID = 0;
     this._model = null;
-    
+
     // START COLLIDER
     const playerGeometry = new THREE.CubeGeometry(0, 0, 0);
     // const playerMaterial = new THREE.MeshBasicMaterial( {color: 0x8888ff});
@@ -50,7 +50,12 @@ class Unit extends Entity {
     this.groundDistanceRaycaster = new THREE.Raycaster();
     this.groundDistanceRaycaster.set(this.position, this.view.rotation);
 
-    this.arrow = new THREE.ArrowHelper(this.groundDistanceRaycaster.ray.direction, this.groundDistanceRaycaster.ray.origin, 100, 0x8888ff);
+    this.arrow = new THREE.ArrowHelper(
+      this.groundDistanceRaycaster.ray.direction,
+      this.groundDistanceRaycaster.ray.origin,
+      100,
+      0x8888ff
+    );
     this.arrow.setDirection(this.groundDistanceRaycaster.ray.direction);
 
     this.isMoving = false;
@@ -88,11 +93,15 @@ class Unit extends Entity {
         this.displayInfo.modelData = this.modelData;
 
         M2Blueprint.load(this.modelData.file).then((m2) => {
-          m2.displayInfo = this.displayInfo;
           this.model = m2;
+          this.model.displayInfo = this.displayInfo;
 
           const { max, min } = m2.geometry.boundingBox;
-          this.collider.geometry = new THREE.CubeGeometry(max.x - min.x, max.y - min.y, max.z - min.z);
+          this.collider.geometry = new THREE.CubeGeometry(
+            max.x - min.x,
+            max.y - min.y,
+            max.z - min.z
+          );
         });
       });
     });
@@ -111,7 +120,11 @@ class Unit extends Entity {
   }
   updatePlayerColliderBox() {
     const { max, min } = this.model.geometry.boundingBox;
-    this.collider.position.set(this.position.x, this.position.y, this.position.z + (max.z - min.z) / 2);
+    this.collider.position.set(
+      this.position.x,
+      this.position.y,
+      this.position.z + (max.z - min.z) / 2
+    );
   }
 
   set model(m2) {
@@ -242,7 +255,7 @@ class Unit extends Entity {
     }
 
     this.updateIsMovingFlag(newCoords);
-    // this.updateGroundFolow();
+    // this.();
   }
 
   afterPositionChange() {
@@ -293,10 +306,10 @@ class Unit extends Entity {
 
   updateGroundDistance(groundMesh, newPosition) {
     this.previousGroundDistance = this.groundDistance;
-    newPosition.z += this._groundFollowConstant - 0.1;
+    const newZ = newPosition.z + this._groundFollowConstant - 0.1;
     this.groundDistanceRaycaster.set(newPosition, { x: 0, y: 0, z: -1 });
     this.arrow.setDirection(this.groundDistanceRaycaster.ray.direction);
-    this.arrow.position.set(newPosition.x, newPosition.y, newPosition.z);
+    this.arrow.position.set(newPosition.x, newPosition.y, newZ);
 
     // intersect with all scene meshes.
     const intersects = this.groundDistanceRaycaster.intersectObjects(groundMesh);
@@ -316,19 +329,20 @@ class Unit extends Entity {
     this.isCollides = false;
     if (this.model) {
       const originPoint = this.collider.position.clone();
-      for (let vertexIndex = 0; vertexIndex < this.collider.geometry.vertices.length; vertexIndex++) {
-        const localVertex = this.collider.geometry.vertices[vertexIndex].clone();
+      this.collider.geometry.vertices.forEach((vertex) => {
+        const localVertex = vertex.clone();
         const globalVertex = localVertex.applyMatrix4(this.collider.matrix);
         const directionVector = globalVertex.sub(this.collider.position);
 
         const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
         const collisionResults = ray.intersectObjects(meshList);
-        if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
-          // console.log(' Hit ');
+        if (collisionResults.length > 0 &&
+          collisionResults[0].distance < directionVector.length()
+        ) {
           isCollide = true;
           this.isCollides = true;
         }
-      }
+      });
     }
 
     return isCollide;
@@ -339,7 +353,7 @@ class Unit extends Entity {
   }
 
   // Обеспецивает хождение по земле
-  updateGroundFolow(vector) {
+  updateGroundFollow() {
     const diff = Math.abs(this._groundFollowConstant - 0.1 - this.groundDistance);
     if ((this.groundDistance > this._groundFollowConstant - 0.1) && !this.isJump) {
       this.translatePosition({ z: -diff * 0.1 });
@@ -358,8 +372,7 @@ class Unit extends Entity {
     }
   }
 
-  delta = 0;
-  updateGravity(delta) {
+  updateGravity() {
     if (this.isJump && this.jumpSpeed > 0) {
       this.translatePosition({ z: this.jumpSpeed });
       this.jumpSpeed -= 0.01;
@@ -370,7 +383,7 @@ class Unit extends Entity {
       this.translatePosition({ z: -0.1 });
     }
 
-    this.updateGroundFolow();
+    this.updateGroundFollow();
   }
 }
 
