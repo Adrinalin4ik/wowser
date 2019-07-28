@@ -1,6 +1,6 @@
 import WorkerPool from '../../../worker/pool';
 import WMOGroup from '../';
-
+import ColliderManager from '../../../../game/world/collider-manager';
 class WMOGroupLoader {
 
   static cache = new Map();
@@ -37,8 +37,10 @@ class WMOGroupLoader {
 
       this.cache.set(path, promise);
     }
+    
+    const group = this.cache.get(path);
 
-    return this.cache.get(path);
+    return group;
   }
 
   static loadByIndex(root, index) {
@@ -50,7 +52,7 @@ class WMOGroupLoader {
 
   static unload(group) {
     const path = group.path.toUpperCase();
-
+    ColliderManager.collidableMeshList.delete(group.view.uuid);
     const refCount = (this.refCounts.get(path) || 1) - 1;
 
     if (refCount <= 0) {

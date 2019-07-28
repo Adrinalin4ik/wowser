@@ -3,7 +3,7 @@ import THREE from 'three';
 import DBC from '../pipeline/dbc';
 import Entity from './entity';
 import M2Blueprint from '../pipeline/m2/blueprint';
-
+import ColliderManager from './world/collider-manager';
 class Unit extends Entity {
 
   constructor(world) {
@@ -20,7 +20,7 @@ class Unit extends Entity {
     this.mp = 0;
 
     this.rotateSpeed = 2;
-    this.moveSpeed = 10;
+    this.moveSpeed = 40;
     this.fallSpeed = 0.3;
     this._view = new THREE.Group();
 
@@ -67,6 +67,8 @@ class Unit extends Entity {
 
     // Animation
     this.currentAnimationIndex = 0;
+
+    this.test = ColliderManager.collidableMeshList;
   }
 
   get position() {
@@ -251,7 +253,7 @@ class Unit extends Entity {
 
   beforePositionChange(newCoords) {
     if (this.world.map.collidableMeshList) {
-      this.updateGroundDistance(this.world.map.collidableMeshList, newCoords);
+      this.updateGroundDistance(newCoords);
     }
 
     this.updateIsMovingFlag(newCoords);
@@ -304,7 +306,7 @@ class Unit extends Entity {
     this.emit('position:change', this);
   }
 
-  updateGroundDistance(groundMesh, newPosition) {
+  updateGroundDistance(newPosition) {
     this.previousGroundDistance = this.groundDistance;
     const newZ = newPosition.z + this._groundFollowConstant - 0.1;
     this.groundDistanceRaycaster.set(newPosition, { x: 0, y: 0, z: -1 });
@@ -312,7 +314,7 @@ class Unit extends Entity {
     this.arrow.position.set(newPosition.x, newPosition.y, newZ);
 
     // intersect with all scene meshes.
-    const intersects = this.groundDistanceRaycaster.intersectObjects(groundMesh);
+    const intersects = this.groundDistanceRaycaster.intersectObjects([...ColliderManager.collidableMeshList.values()]);
     if (intersects.length > 0) {
       this.groundDistance = intersects[0].distance;
     }

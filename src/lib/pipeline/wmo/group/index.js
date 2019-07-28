@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import WMORootFlags from '../root/flags';
 import WMOGroupView from './view';
 import BSPTree from '../../../utils/bsp-tree';
+import ColliderManager from '../../../game/world/collider-manager';
 
 class WMOGroup {
 
@@ -22,11 +23,16 @@ class WMOGroup {
     this.createGeometry(def.attributes, def.batches);
     this.createBoundingBox(def.boundingBox);
     this.createBSPTree(def.bspNodes, def.bspPlaneIndices, def.attributes);
+    this.view = null;
   }
 
   // Produce a new WMOGroupView suitable for placement in a scene.
   createView() {
-    return new WMOGroupView(this, this.geometry, this.material);
+    if (this.view) {
+      ColliderManager.collidableMeshList.delete(this.view.uuid);
+    }
+    this.view = new WMOGroupView(this, this.geometry, this.material);
+    return this.view;
   }
 
   createPortals(root, def) {

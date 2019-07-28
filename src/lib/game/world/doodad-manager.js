@@ -212,7 +212,6 @@ class DoodadManager {
     // Add doodad to world map.
     doodad.updateMatrix();
     doodad.updateMatrixWorld();
-    this.map.collidableMeshList.push(doodad.boundingMesh);
     
     this.view.add(doodad);
   }

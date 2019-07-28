@@ -4,6 +4,7 @@ import Submesh from './submesh';
 import M2Material from './material';
 import AnimationManager from './animation-manager';
 import BatchManager from './batch-manager';
+import ColliderManager from '../../game/world/collider-manager';
 
 class M2 extends THREE.Group {
 
@@ -89,7 +90,7 @@ class M2 extends THREE.Group {
   createBoundingMesh(vertices) {
     let mesh;
     
-    const material = new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0 });
+    const material = new THREE.MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0 });
     const geometry = new THREE.Geometry();
     // make geometry
     for (let vertexIndex = 0, len = vertices.length; vertexIndex < len; ++vertexIndex) {
@@ -118,7 +119,13 @@ class M2 extends THREE.Group {
     mesh.matrixAutoUpdate = this.matrixAutoUpdate;
 
     mesh.visible = true;
+
+    ColliderManager.collidableMeshList.set(mesh.uuid, mesh);
+    
+    
     this.add(mesh);
+
+
     return mesh;
   }
 
@@ -605,9 +612,10 @@ class M2 extends THREE.Group {
     this.detachEventListeners();
     this.eventListeners = [];
 
+    ColliderManager.collidableMeshList.delete(this.boundingMesh.uuid);
+    this.boundingMesh.geometry.dispose();
     this.geometry.dispose();
     this.mesh.geometry.dispose();
-
     this.submeshes.forEach((submesh) => {
       submesh.dispose();
     });
@@ -615,7 +623,7 @@ class M2 extends THREE.Group {
 
   clone() {
     let instance = {};
-
+    
     if (this.canInstance) {
       instance.animations = this.animations;
       instance.geometry = this.geometry;
@@ -624,8 +632,9 @@ class M2 extends THREE.Group {
     } else {
       instance = null;
     }
-
-    return new this.constructor(this.path, this.data, this.skinData, instance);
+    ColliderManager.collidableMeshList.delete(this.boundingMesh.uuid);
+    const newM2 = new this.constructor(this.path, this.data, this.skinData, instance);
+    return newM2;
   }
 
 }

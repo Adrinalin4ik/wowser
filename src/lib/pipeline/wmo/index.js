@@ -2,7 +2,7 @@ import ContentQueue from '../../utils/content-queue';
 import WMORootLoader from './root/loader';
 import WMOGroupLoader from './group/loader';
 import M2Blueprint from '../m2/blueprint';
-
+import ColliderManager from '../../game/world/collider-manager';
 class WMO {
 
   static LOAD_GROUP_INTERVAL = 1;
@@ -253,6 +253,7 @@ class WMO {
 
     for (const group of this.groups.values()) {
       WMOGroupLoader.unload(group);
+      // ColliderManager.collidableMeshList.delete(group.uuid);
     }
 
     for (const doodad of this.doodads.values()) {
@@ -279,6 +280,7 @@ class WMO {
   placeGroupView(groupView) {
     // Add to scene and update matrices
     this.views.root.add(groupView);
+    // ColliderManager.collidableMeshList.set(groupView.uuid, groupView);
     groupView.updateMatrix();
     groupView.updateMatrixWorld();
   }

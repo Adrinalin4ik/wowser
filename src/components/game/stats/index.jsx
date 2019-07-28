@@ -1,6 +1,7 @@
 import React from 'react';
 import spots from '../../../lib/game/world/spots'
 import './index.styl';
+import ColliderManager from '../../../lib/game/world/collider-manager';
 class Stats extends React.Component {
 
   static propTypes = {
@@ -19,6 +20,7 @@ class Stats extends React.Component {
 
     this._onTeleportChange = ::this._onTeleportChange;
   }
+  
   componentDidMount() {
     console.log("Player", this.props.session.player);
     this.props.session.player.on('map:changed', (map) => {
@@ -28,7 +30,7 @@ class Stats extends React.Component {
 
   _onTeleportChange(event){
     const locationId = event.target.value;
-    const location = spots.find(x => x.id == locationId);
+    const location = spots.find(x => x.id === locationId);
     this.props.session.player.worldport(...location.coords);
 
     this.setState({ currentLocationId: locationId });
@@ -52,7 +54,6 @@ class Stats extends React.Component {
 
   playerStats() {
     const player = this.props.session.player;
-    // console.log(player)
 
     return (
       <div>
@@ -93,17 +94,13 @@ class Stats extends React.Component {
 
   mapStats() {
     const map = this.state.map;
-    let collidableMeshList = null;
-    if (map) {
-      collidableMeshList = map.collidableMeshList;
-    }
 
     return (
       <div>
         <h2>Colliders</h2>
         <div className="divider"></div>
         <p>
-          Colliders loaded: { collidableMeshList ? collidableMeshList.length : 0 }
+          Colliders loaded: { ColliderManager.collidableMeshList.size }
         </p>
         <div className="divider"></div>
         <h2>Map Chunks</h2>

@@ -160,15 +160,19 @@ class WMOManager {
     this.pendingUnloads.delete(entry.id);
 
     const wmo = this.entries.get(entry.id);
+    
+    for (const obj of wmo.views.root.children) {
+      const colisionIndex = this.view.collidableMeshList.findIndex(x => x.uuid === obj.uuid);
+      if (colisionIndex !== -1) {
+        this.view.collidableMeshList.splice(colisionIndex, 1);
+      }
+    }
 
     this.view.remove(wmo.views.root);
 
     this.entries.delete(entry.id);
     this.counters.loadedEntries--;
 
-    // for (const obj of wmo.views.root.children) {
-    //   this.view.collidableMeshList.splice(this.view.collidableMeshList.findIndex(x => x.uuid = obj.uuid), 1);
-    // }
 
 
     this.counters.loadingGroups -= wmo.counters.loadingGroups;
@@ -212,24 +216,6 @@ class WMOManager {
 
     view.updateMatrix();
     view.updateMatrixWorld();
-    setTimeout(() => {
-      // console.log(view, entry);
-      for(const item of view.children) {
-        this.view.collidableMeshList.push(item);
-        if (item.boundingMesh) {
-          // console.log('Item', item)
-          // if (item.name === 'BoundingMesh') {
-            // console.log("Here", item);
-            // item.boundingMesh.position.set(item.parent.position.x, item.parent.position.y, item.parent.position.z);
-            // this.view.collidableMeshList.push(item.boundingMesh);
-            // window['h'].scene.add(item.boundingMesh);
-          // }
-          // this.view.collidableMeshList.push(item);
-          // item.boundingMesh.position.set(view.position.x,view.position.y,view.position.z);
-          // console.log(item);
-        }
-      }
-    }, 5000);
 
     this.view.add(view);
   }

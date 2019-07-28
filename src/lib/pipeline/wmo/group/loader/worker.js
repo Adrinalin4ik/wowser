@@ -12,7 +12,6 @@ export default function(path, index, rootHeader) {
     const stream = new DecodeStream(buffer);
 
     const groupData = WMOGroup.decode(stream);
-    console.log(groupData);
     const def = new WMOGroupDefinition(path, index, rootHeader, groupData);
 
     return def;

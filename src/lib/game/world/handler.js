@@ -49,9 +49,11 @@ class WorldHandler extends EventEmitter {
       // console.log("Wall", wall2)
       // this.scene.add(wall2);
 
-      // var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
-      // var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
-      // var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+      // const skyBoxGeometry = new THREE.CubeGeometry( 100, 100, 100 );
+      // const skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+      // const skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+      // skyBox.name = 'SkyBox';
+      // skyBox.position.set(-9430, -1324, 60);
       // this.scene.add(skyBox);
   
   

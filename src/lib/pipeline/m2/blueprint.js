@@ -1,6 +1,6 @@
 import WorkerPool from '../worker/pool';
 import M2 from './';
-
+import ColliderManager from '../../game/world/collider-manager';
 class M2Blueprint {
 
   static cache = new Map();
@@ -10,7 +10,7 @@ class M2Blueprint {
   static pendingUnload = new Set();
   static unloaderRunning = false;
 
-  static UNLOAD_INTERVAL = 15000;
+  static UNLOAD_INTERVAL = 1000;
 
   static load(rawPath) {
     const path = rawPath.replace(/\.md(x|l)/i, '.m2').toUpperCase();
@@ -36,7 +36,6 @@ class M2Blueprint {
         const [data, skinData] = args;
 
         const m2 = new M2(path, data, skinData);
-
         if (m2.receivesAnimationUpdates) {
           this.animationUpdateTargets.set(path, m2);
         }
@@ -52,15 +51,15 @@ class M2Blueprint {
 
   static unload(m2) {
     const path = m2.path.replace(/\.md(x|l)/i, '.m2').toUpperCase();
-
     // Immediately dispose any non-instanced M2s.
     if (!m2.canInstance) {
       m2.dispose();
     }
-
+    
     let refCount = this.references.get(path) || 1;
-
+    
     --refCount;
+    ColliderManager.collidableMeshList.delete(m2.boundingMesh.uuid);
 
     if (refCount === 0) {
       this.pendingUnload.add(path);

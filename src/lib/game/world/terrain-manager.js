@@ -1,4 +1,5 @@
 import LiquidType from '../../pipeline/liquid/type';
+import ColliderManager from './collider-manager';
 
 class TerrainManager {
 
@@ -10,14 +11,16 @@ class TerrainManager {
 
   loadChunk(_index, terrain) {
     this.view.add(terrain);
-    this.map.collidableMeshList.push(terrain);
+    // this.map.collidableMeshList.push(terrain);
+    ColliderManager.collidableMeshList.set(terrain.uuid, terrain);
     terrain.updateMatrix();
   }
 
   unloadChunk(_index, terrain) {
     this.view.remove(terrain);
     terrain.dispose();
-    // this.map.collidableMeshList.splice(this.map.collidableMeshList.findIndex(x => x.uuid = terrain.uuid), 1);
+
+    ColliderManager.collidableMeshList.delete(terrain.uuid);
   }
 
   animate(delta, camera, cameraMoved) {
