@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classes from 'classnames';
 
 import './index.styl';
@@ -6,9 +7,9 @@ import './index.styl';
 class Portrait extends React.Component {
 
   static propTypes = {
-    self: React.PropTypes.bool,
-    unit: React.PropTypes.object.isRequired,
-    target: React.PropTypes.bool
+    self: PropTypes.bool,
+    unit: PropTypes.object.isRequired,
+    target: PropTypes.bool
   };
 
   render() {
@@ -18,7 +19,7 @@ class Portrait extends React.Component {
       target: this.props.target
     });
     return (
-      <portrait className={ className }>
+      <div className={ className }>
         <div className="icon portrait"></div>
 
         <header className="name">{ unit.name }</header>
@@ -28,7 +29,7 @@ class Portrait extends React.Component {
 
         <div className="health">{ unit.hp } / { unit.maxHp }</div>
         <div className="mana">{ unit.mp } / { unit.maxMp }</div>
-      </portrait>
+      </div>
     );
   }
 

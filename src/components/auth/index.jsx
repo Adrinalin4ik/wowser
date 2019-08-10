@@ -62,7 +62,7 @@ class AuthScreen extends React.Component {
 
   render() {
     return (
-      <auth className="auth screen">
+      <div className="auth screen">
         <div className="panel">
           <h1>Authentication</h1>
 
@@ -98,7 +98,7 @@ class AuthScreen extends React.Component {
             <input type="submit" defaultValue="Connect" />
           </form>
         </div>
-      </auth>
+      </div>
     );
   }
 

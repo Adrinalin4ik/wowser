@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import spots from '../../../lib/game/world/spots'
 import './index.styl';
 import ColliderManager from '../../../lib/game/world/collider-manager';
 class Stats extends React.Component {
 
   static propTypes = {
-    renderer: React.PropTypes.object,
-    map: React.PropTypes.object,
-    session: React.PropTypes.object
+    renderer: PropTypes.object,
+    map: PropTypes.object,
+    session: PropTypes.object
   };
 
   constructor() {
@@ -160,7 +161,7 @@ class Stats extends React.Component {
 
     const { memory, programs, render } = renderer.info;
     return (
-      <stats className="stats frame thin">
+      <div className="stats frame thin">
       { this.playerStats() }
         <h2>Memory</h2>
         <div className="divider"></div>
@@ -192,7 +193,7 @@ class Stats extends React.Component {
         </p>
 
         { this.mapStats() }
-      </stats>
+      </div>
     );
   }
 

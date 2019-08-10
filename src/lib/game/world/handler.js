@@ -119,7 +119,7 @@ class WorldHandler extends EventEmitter {
     if (this.map !== null) {
       if (cameraMoved) {
         this.map.locateCamera(camera);
-        // this.map.updateVisibility(camera);
+        this.map.updateVisibility(camera);
       }
       // this.map.updateWorldTime(camera, this.map.mapID);
       this.map.animate(delta, camera, cameraMoved);

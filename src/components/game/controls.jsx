@@ -1,12 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import THREE from 'three';
 import key from 'keymaster';
+import JoyStick from 'react-joystick';
+
+
+const joyOptions = {
+  mode: 'semi',
+  catchDistance: 150,
+  color: 'white'
+};
+
+const containerStyle = {
+  position: 'fixed',
+  height: '50%',
+  width: '20%',
+  bottom: 0,
+  left: 0,
+  zIndex: 10,
+  background: 'transparent'
+};
 
 class Controls extends React.Component {
 
   static propTypes = {
-    camera: React.PropTypes.object.isRequired,
-    for: React.PropTypes.object.isRequired
+    camera: PropTypes.object.isRequired,
+    for: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -15,9 +34,11 @@ class Controls extends React.Component {
     this.element = document.body;
     this.unit = props.for;
     this.camera = props.camera;
-
+    console.log('Camera', this.camera);
     // Based on THREE's OrbitControls
     // See: http://threejs.org/examples/js/controls/OrbitControls.js
+
+
     this.clock = new THREE.Clock();
 
     this.rotateStart = new THREE.Vector2();
@@ -51,19 +72,34 @@ class Controls extends React.Component {
     this.quatInverse = this.quat.clone().inverse();
 
     this.EPS = 0.000001;
+    
+    this.managerListener = ::this.managerListener;
 
     this._onMouseDown = ::this._onMouseDown;
     this._onMouseUp = ::this._onMouseUp;
     this._onMouseMove = ::this._onMouseMove;
     this._onMouseWheel = ::this._onMouseWheel;
 
+    this._onTouchStart = ::this._onTouchStart;
+    this._onTouchEnd = ::this._onTouchEnd;
+    this._onTouchMove = ::this._onTouchMove;
+
     this.element.addEventListener('mousedown', this._onMouseDown);
     this.element.addEventListener('mouseup', this._onMouseUp);
     this.element.addEventListener('mousemove', this._onMouseMove);
     this.element.addEventListener('mousewheel', this._onMouseWheel);
 
+    this.element.addEventListener('touchstart', this._onTouchStart);
+    this.element.addEventListener('touchend', this._onTouchEnd);
+    this.element.addEventListener('touchmove', this._onTouchMove);
+
     // Firefox scroll-wheel support
     this.element.addEventListener('DOMMouseScroll', this._onMouseWheel);
+    
+    this.element.addEventListener('contextmenu', function(ev) {
+      ev.preventDefault();
+      return false;
+    }, false);
 
     this.update();
   }
@@ -74,6 +110,25 @@ class Controls extends React.Component {
     this.element.removeEventListener('mousemove', this._onMouseMove);
     this.element.removeEventListener('mousewheel', this._onMouseWheel);
     this.element.removeEventListener('DOMMouseScroll', this._onMouseWheel);
+
+    this.element.removeEventListener('touchstart', this._onTouchDown);
+    this.element.removeEventListener('touchend', this._onTouchEnd);
+    this.element.removeEventListener('touchmove', this._onTouchMove);
+
+    this.element.removeEventListener('contextmenu');
+
+    this.isRun = false;
+  }
+
+  managerListener(manager) {
+    manager.on('move', (e, stick) => {
+      // console.log('I moved!')
+      this.isRun = true;
+    })
+    manager.on('end', () => {
+      // console.log('I ended!')
+      this.isRun = false;
+    })
   }
 
   update() {
@@ -87,7 +142,7 @@ class Controls extends React.Component {
         unit.jump();
       }
 
-      if (key.isPressed('up') || key.isPressed('w')) {
+      if (key.isPressed('up') || key.isPressed('w') || this.isRun) {
         unit.moveForward(delta);
       }
 
@@ -156,7 +211,6 @@ class Controls extends React.Component {
     this.offset.applyQuaternion(this.quatInverse);
 
     position.copy(this.target).add(this.offset);
-
     this.camera.lookAt(this.target);
 
     this.thetaDelta = 0;
@@ -180,17 +234,57 @@ class Controls extends React.Component {
     this.scale *= this.zoomScale;
   }
 
+  _onTouchStart(event) {
+    this.rotating = true;
+    this.rotateStart.set(event.touches[0].clientX, event.touches[0].clientY);
+  }
+
+  _onTouchEnd() {
+    this.rotating = false;
+  }
+
+  _onTouchMove(event) {
+    if (this.rotating) {
+      event.preventDefault();
+
+      this.rotateEnd.set(event.touches[0].clientX, event.touches[0].clientY);
+      this.rotateDelta.subVectors(this.rotateEnd, this.rotateStart);
+
+      this.rotateHorizontally(
+        2 * Math.PI * this.rotateDelta.x / this.element.clientWidth * this.rotateSpeed
+      );
+      
+      if (event.touches.length === 1) {
+        this.unit.view.rotateZ(this.thetaDelta);
+      }
+
+      this.rotateVertically(
+        2 * Math.PI * this.rotateDelta.y / this.element.clientHeight * this.rotateSpeed
+      );
+
+      this.rotateStart.copy(this.rotateEnd);
+
+      this.update();
+    }
+  }
+
   _onMouseDown(event) {
     this.rotating = true;
     this.rotateStart.set(event.clientX, event.clientY);
-  }
 
+    if (event.which === 3) {
+      // this.unit.view.rotation.z = this.camera.getWorldDirection().z;
+    }
+
+  }
+  
   _onMouseUp() {
     this.rotating = false;
   }
 
   _onMouseMove(event) {
     if (this.rotating) {
+      console.log("Here", event)
       event.preventDefault();
 
       this.rotateEnd.set(event.clientX, event.clientY);
@@ -199,6 +293,15 @@ class Controls extends React.Component {
       this.rotateHorizontally(
         2 * Math.PI * this.rotateDelta.x / this.element.clientWidth * this.rotateSpeed
       );
+      
+      if (event.which === 3) {
+        this.unit.view.rotateZ(this.thetaDelta);
+        // let temp = (this.camera.rotation.x * this.camera.rotation.y);
+        // console.log(temp);
+        // if (temp < 0.5 && temp > 0) {
+        //   this.unit.view.rotation.z = this.camera.rotation.x * this.camera.rotation.y - Math.PI/2;
+        // }
+      }
 
       this.rotateVertically(
         2 * Math.PI * this.rotateDelta.y / this.element.clientHeight * this.rotateSpeed
@@ -225,7 +328,11 @@ class Controls extends React.Component {
   }
 
   render() {
-    return null;
+    return (
+      <div className="controls">
+        <JoyStick joyOptions={joyOptions} containerStyle={containerStyle} managerListener={this.managerListener} />
+      </div>
+    );
   }
 
 }

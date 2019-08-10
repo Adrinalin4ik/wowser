@@ -12,10 +12,10 @@ class HUD extends React.Component {
   render() {
     const player = session.player;
     return (
-      <hud className="hud">
+      <div className="hud">
         <Portrait self unit={ player } />
         { player.target && <Portrait target unit={ player.target } /> }
-      </hud>
+      </div>
     );
   }
 

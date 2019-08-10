@@ -98,12 +98,12 @@ class GameScreen extends React.Component {
 
   render() {
     return (
-      <game className="game screen">
+      <div className="game screen">
         <canvas ref="canvas"></canvas>
         <HUD />
         <Controls ref="controls" for={ session.player } camera={ this.camera } />
         <Stats ref="stats" renderer={ this.renderer } map={ session.world.map } session={session} />
-      </game>
+      </div>
     );
   }
 

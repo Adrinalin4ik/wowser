@@ -50,7 +50,7 @@ class ChatPanel extends React.Component {
 
   render() {
     return (
-      <chat className="chat frame">
+      <div className="chat frame">
         <ul ref="messages">
           { this.state.messages.map((message, index) => {
             const className = classes('message', message.kind);
@@ -66,7 +66,7 @@ class ChatPanel extends React.Component {
           <input type="text" onChange={ this._onChange }
                  name="text" value={ this.state.text } />
         </form>
-      </chat>
+      </div>
     );
   }
 

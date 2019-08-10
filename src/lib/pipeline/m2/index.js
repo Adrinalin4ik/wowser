@@ -90,7 +90,7 @@ class M2 extends THREE.Group {
   createBoundingMesh(vertices) {
     let mesh;
     
-    const material = new THREE.MeshBasicMaterial({ wireframe: true, transparent: true, opacity: 0 });
+    const material = new THREE.MeshBasicMaterial({ wireframe: true, transparent: false, opacity: 0 });
     const geometry = new THREE.Geometry();
     // make geometry
     for (let vertexIndex = 0, len = vertices.length; vertexIndex < len; ++vertexIndex) {

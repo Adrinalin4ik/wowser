@@ -9,6 +9,9 @@ module.exports = {
     filename: 'wowser-[hash].js'
   },
   resolve: {
+    alias: {
+      'react': path.join(__dirname, 'node_modules', 'react')
+    },
     extensions: ['', '.js', '.jsx']
   },
   resolveLoader: {
@@ -61,6 +64,8 @@ module.exports = {
   ],
   devServer: {
     contentBase: path.join(__dirname, 'public'),
+    host: '0.0.0.0',
+    disableHostCheck: true,
     proxy: {
       '/pipeline/*': {
         target: 'http://localhost:3000',

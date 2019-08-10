@@ -62,7 +62,7 @@ class CharactersScreen extends React.Component {
 
   render() {
     return (
-      <characters className="characters screen">
+      <div className="characters screen">
         <div className="panel">
           <h1>Character Selection</h1>
 
@@ -92,7 +92,7 @@ class CharactersScreen extends React.Component {
             <input type="button" value="Refresh" onClick={ this.refresh } />
           </form>
         </div>
-      </characters>
+      </div>
     );
   }
 
