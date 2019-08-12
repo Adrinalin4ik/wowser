@@ -56,7 +56,9 @@
     "react-joystick-component": "^1.4.0",
     "three": "^0.77.0",
     "three-orbitcontrols": "^2.102.2",
-    "websockify": "^0.7.1"
+    "websockify": "^0.7.1",
+    "react-tabs": "^0.8.2",
+    "ws": "1.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",

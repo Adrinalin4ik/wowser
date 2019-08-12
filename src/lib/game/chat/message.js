@@ -1,7 +1,9 @@
 class ChatMessage {
 
   // Creates a new message
-  constructor(kind, text) {
+  constructor(kind, text, guid1, guid2) {
+    this.guid1 = guid1;
+    this.guid2 = guid2;
     this.kind = kind;
     this.text = text;
     this.timestamp = new Date();

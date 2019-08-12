@@ -4,7 +4,7 @@ class Raw {
   }
 
   raw(value) {
-    return ('\u0000\u0000\u0000\u0000' + value.split('').reverse().join('')).slice(-4);
+    return (value.split('').reverse().join('') + '\u0000').slice(0, 4);
   }
 
   get locale() {
@@ -34,6 +34,12 @@ class Config {
     this.platform = 'x86';
 
     this.raw = new Raw(this);
+
+    const CustomDef = require('../../conf/conf.js.dist');
+    Object.assign(this, CustomDef);
+    const Custom = require('../../conf/conf.js');
+    Object.assign(this, Custom);
+
   }
 
   set version(version) {

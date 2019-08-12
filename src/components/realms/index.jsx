@@ -46,7 +46,7 @@ class RealmsScreen extends React.Component {
   _onRealmSelect(event) {
     const realms = session.realms.list;
     this.setState({
-        realm: realms[event.target.selectedIndex]
+      realm: realms[event.target.selectedIndex]
     });
   }
 
@@ -54,7 +54,7 @@ class RealmsScreen extends React.Component {
     const realms = session.realms.list;
     this.setState({
       realm: realms[0],
-      realms: realms
+      realms
     });
   }
 
@@ -77,7 +77,7 @@ class RealmsScreen extends React.Component {
                       onChange={ this._onRealmSelect }>
                 { this.state.realms.map((realm) => {
                   return (
-                    <option key={ realm.id } value={ realm }>
+                    <option key={ realm.ord } value={ realm }>
                       { realm.name }
                     </option>
                   );

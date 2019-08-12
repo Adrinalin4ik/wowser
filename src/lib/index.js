@@ -5,7 +5,6 @@ import CharactersHandler from './characters/handler';
 import ChatHandler from './game/chat/handler';
 import Config from './config';
 import GameHandler from './game/handler';
-import Player from './game/player';
 import RealmsHandler from './realms/handler';
 import WorldHandler from './game/world/handler';
 import EnemyHandler from './enemy/handler';
@@ -23,7 +22,6 @@ class Client extends EventEmitter {
     this.characters = new CharactersHandler(this);
     this.chat = new ChatHandler(this);
     this.world = new WorldHandler(this);
-    this.player = new Player(this.world);
     this.enemyHandler = new EnemyHandler(this);
     this.gameObjecthandler = new GameObjectHandler(this);
   }

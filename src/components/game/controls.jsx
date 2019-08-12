@@ -84,6 +84,8 @@ class Controls extends React.Component {
     this._onTouchEnd = ::this._onTouchEnd;
     this._onTouchMove = ::this._onTouchMove;
 
+    this._onContextMenu = ::this._onContextMenu;
+
     this.element.addEventListener('mousedown', this._onMouseDown);
     this.element.addEventListener('mouseup', this._onMouseUp);
     this.element.addEventListener('mousemove', this._onMouseMove);
@@ -96,10 +98,7 @@ class Controls extends React.Component {
     // Firefox scroll-wheel support
     this.element.addEventListener('DOMMouseScroll', this._onMouseWheel);
     
-    this.element.addEventListener('contextmenu', function(ev) {
-      ev.preventDefault();
-      return false;
-    }, false);
+    this.element.addEventListener('contextmenu', this._onContextMenu, false);
 
     this.update();
   }
@@ -115,11 +114,15 @@ class Controls extends React.Component {
     this.element.removeEventListener('touchend', this._onTouchEnd);
     this.element.removeEventListener('touchmove', this._onTouchMove);
 
-    this.element.removeEventListener('contextmenu');
+    this.element.removeEventListener('contextmenu', this._onContextMenu);
 
     this.isRun = false;
   }
 
+  _onContextMenu(event) {
+    event.preventDefault();
+    return false;
+  }
   managerListener(manager) {
     manager.on('move', (e, stick) => {
       // console.log('I moved!')
@@ -330,7 +333,7 @@ class Controls extends React.Component {
   render() {
     return (
       <div className="controls">
-        <JoyStick joyOptions={joyOptions} containerStyle={containerStyle} managerListener={this.managerListener} />
+        {/* <JoyStick joyOptions={joyOptions} containerStyle={containerStyle} managerListener={this.managerListener} /> */}
       </div>
     );
   }

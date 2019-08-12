@@ -7,8 +7,12 @@ import GamePacket from './packet';
 import GUID from '../game/guid';
 import SHA1 from '../crypto/hash/sha1';
 import Socket from '../net/socket';
+import ChatEnum from '../game/chat/chatEnum';
+import Player from './player';
 
 class GameHandler extends Socket {
+
+  static pingRecv = true;
 
   // Creates a new game handler
   constructor(session) {
@@ -17,16 +21,25 @@ class GameHandler extends Socket {
     // Holds session
     this.session = session;
 
+    this.session.player = new Player('Player', -1);
+
+    // [guid] = name
+    this.playerNames = [];
+
+    this.playerNames[0] = { name: 'SYSTEM' };
+
     // Listen for incoming data
     this.on('data:receive', ::this.dataReceived);
 
     // Delegate packets
+    this.on('packet:receive:SMSG_PONG', ::this.handlePong);
     this.on('packet:receive:SMSG_AUTH_CHALLENGE', ::this.handleAuthChallenge);
     this.on('packet:receive:SMSG_AUTH_RESPONSE', ::this.handleAuthResponse);
     this.on('packet:receive:SMSG_LOGIN_VERIFY_WORLD', ::this.handleWorldLogin);
+    this.on('packet:receive:SMSG_NAME_QUERY_RESPONSE', ::this.handleName);
   }
 
-  // Connects to given host through given port
+  // Connects to given host through given realm information
   connect(host, realm) {
     this.realm = realm;
     if (!this.connected) {
@@ -54,6 +67,15 @@ class GameHandler extends Socket {
 
   // Attempts to join game with given character
   join(character) {
+    let name = character.toString();
+
+    this.session.player.name = character.name;
+    this.session.player.guid = character.guid;
+
+    this.playerNames[character.guid.low] = {
+      name: character.name
+    };
+
     if (character) {
       console.info('joining game with', character);
 
@@ -74,7 +96,7 @@ class GameHandler extends Socket {
       if (!this.connected) {
         return;
       }
-
+      let isLarge = false;
       if (this.remaining === false) {
 
         if (this.buffer.available < GamePacket.HEADER_SIZE_INCOMING) {
@@ -86,12 +108,20 @@ class GameHandler extends Socket {
           this._crypt.decrypt(new Uint8Array(this.buffer.buffer, this.buffer.index, GamePacket.HEADER_SIZE_INCOMING));
         }
 
-        this.remaining = this.buffer.readUnsignedShort(ByteBuffer.BIG_ENDIAN);
+        const firstByte = this.buffer.raw[this.buffer.index];
+        isLarge = firstByte & GamePacket.LARGE_PACKET_FLAG;
+
+        if (isLarge) {
+          this._crypt.decrypt(new Uint8Array(this.buffer.buffer, this.buffer.index +  GamePacket.HEADER_SIZE_INCOMING, 1));
+          this.remaining = this.buffer.readUnsignedByte(ByteBuffer.BIG_ENDIAN) | this.buffer.readUnsignedShort(ByteBuffer.BIG_ENDIAN);
+        } else {
+          this.remaining = this.buffer.readUnsignedShort(ByteBuffer.BIG_ENDIAN);
+        }
       }
 
       if (this.remaining > 0 && this.buffer.available >= this.remaining) {
         const size = GamePacket.OPCODE_SIZE_INCOMING + this.remaining;
-        const gp = new GamePacket(this.buffer.readUnsignedShort(), this.buffer.seek(-GamePacket.HEADER_SIZE_INCOMING).read(size), false);
+        const gp = new GamePacket(this.buffer.readUnsignedShort(), this.buffer.seek(-GamePacket.HEADER_SIZE_INCOMING).read(size), false, isLarge);
 
         this.remaining = false;
 
@@ -108,6 +138,60 @@ class GameHandler extends Socket {
         return;
       }
     }
+  }
+
+  handleName(gp) {
+    const guid = gp.readPackedGUID();
+    const name_known = gp.readUnsignedByte();
+    const name = gp.readCString();
+    const realm = gp.readCString(); // only for crossrealm
+
+    const race = gp.readUnsignedByte();
+    const gender = gp.readUnsignedByte(); // guid2
+    const playerClass = gp.readUnsignedByte();
+    const declined = gp.readUnsignedByte();
+
+    this.session.player.name = name;
+
+    this.playerNames[guid] = {
+      name
+        // race : race,
+        // gender : gender,
+        // playerClass : playerClass
+    };
+
+    this.session.chat.emit('message', null); // to refresh
+  }
+
+  askName(guid) {
+    const app = new GamePacket(GameOpcode.CMSG_NAME_QUERY, 64);
+
+    app.writeGUID(guid);
+
+    this.session.game.send(app);
+    return true;
+  }
+
+  // Pong handler (SMSG_PONG)
+  handlePong(gp) {
+    console.log('pong');
+    this.pingRecv = true;
+    var ping = gp.readUnsignedInt(); // (0x01)
+  }
+
+  ping() {
+    console.log('ping');
+    if (this.pingRecv === false) {
+      this.disconnect();
+    }
+
+    const app = new GamePacket(GameOpcode.CMSG_PING, GamePacket.OPCODE_SIZE_INCOMING + 64);
+    app.writeUnsignedInt(1);      // ping ( unknown value)
+    app.writeUnsignedInt(10);     // latency, 10ms for now
+
+    this.pingRecv = false;
+
+    this.send(app);
   }
 
   // Auth challenge handler (SMSG_AUTH_CHALLENGE)
@@ -177,7 +261,31 @@ class GameHandler extends Socket {
 
   // World login handler (SMSG_LOGIN_VERIFY_WORLD)
   handleWorldLogin(_gp) {
+
+    setInterval(() => {
+      this.ping();
+    }, 50000);
+
+    this.joinWorldChannel();
     this.emit('join');
+  }
+
+  joinWorldChannel() {
+    console.log('join world');
+
+    const channel = ChatEnum.channel;
+    const pass = '';
+
+    const size = 1 + 16 +  4 + 4 + channel.length + pass.length;
+    const app = new GamePacket(GameOpcode.CMSG_JOIN_CHANNEL, size);
+    app.writeUnsignedInt(0);
+    app.writeByte(0);
+    app.writeByte(0);
+    app.writeString(channel);
+    app.writeString(pass);
+
+    this.session.game.send(app);
+    return true;
   }
 
 }

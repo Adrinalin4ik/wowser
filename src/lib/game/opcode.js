@@ -81,6 +81,17 @@ class GameOpcode {
 
   static MSG_SET_RAID_DIFFICULTY            = 0x04EB;
 
+  static CMSG_NAME_QUERY                    = 0x0050;
+  static SMSG_NAME_QUERY_RESPONSE           = 0x0051;
+  
+  static CMSG_JOIN_CHANNEL                  = 0x0097;
+
+  static SMSG_CHANNEL_NOTIFY                = 0x0099;
+
+  static CMSG_PING                          = 0x01DC;
+  static SMSG_PONG                          = 0x01DD;
+
+  static SMSG_GM_MESSAGECHAT                = 0x03B3;
 
   // static SMSG_CHAR_DELETE = 0x278;
   // static SMSG_ADDON_INFO = 0xAF9;

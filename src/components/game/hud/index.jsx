@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './index.styl';
-
+import Chat from '../chat';
 // TODO: import Chat from '../chat';
 import Portrait from '../portrait';
 // TODO: import Quests from '../quests';
@@ -15,6 +15,7 @@ class HUD extends React.Component {
       <div className="hud">
         <Portrait self unit={ player } />
         { player.target && <Portrait target unit={ player.target } /> }
+        <Chat />
       </div>
     );
   }

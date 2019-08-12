@@ -2,10 +2,10 @@ import Unit from './unit';
 
 class Player extends Unit {
 
-  constructor(world) {
-    super(world);
-
-    this.name = 'Player';
+  constructor(name, guid) {
+    super(guid);
+    
+    this.name = name;
     this.hp = this.hp;
     this.mp = this.mp;
     this.remote = false;

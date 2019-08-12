@@ -6,9 +6,9 @@ import M2Blueprint from '../pipeline/m2/blueprint';
 import ColliderManager from './world/collider-manager';
 class Unit extends Entity {
 
-  constructor(world) {
+  constructor(guid) {
     super();
-    this.world = world;
+    this.guid = guid;
     this.name = '<unknown>';
     this.level = '?';
     this.target = null;
@@ -252,9 +252,9 @@ class Unit extends Entity {
   }
 
   beforePositionChange(newCoords) {
-    if (this.world.map.collidableMeshList) {
-      this.updateGroundDistance(newCoords);
-    }
+    // if (this.world.map.collidableMeshList) {
+    this.updateGroundDistance(newCoords);
+    // }
 
     this.updateIsMovingFlag(newCoords);
     // this.();
